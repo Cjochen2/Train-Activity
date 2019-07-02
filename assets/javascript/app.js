@@ -38,7 +38,7 @@ var firebaseConfig = {
     console.log(newTrain.name);
     console.log(newTrain.destination);
     console.log(newTrain.start);
-    console.log(newTrain.freq);
+    console.log(newTrain.frequency);
   
     // Clears all of the text-boxes
     $("#train-name-input").val("");
@@ -47,7 +47,74 @@ var firebaseConfig = {
     $("#frequency-input").val("");
   });
   
-  // 3. Create Firebase event for adding train to the database and a row in the html when a user adds an entry
+  function test(){
+    database.ref().on("child_added", function (childSnapshot) {
+    
+    
+      // Store everything into a variable.
+    var trainName = childSnapshot.val().name;
+    var dest = childSnapshot.val().destination;
+    var firstStop = 0;
+    var freq = childSnapshot.val().frequency;
+  
+
+      var firstConverted = moment(firstStop, "HH:mm").subtract(1, "years");
+      console.log(firstConverted);
+    
+      var currentTime = moment();
+      console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
+    
+      var diffTime = moment().diff(moment(firstConverted), "minutes");
+      console.log("DIFFERENCE IN TIME: " + diffTime);
+    
+      var tRemainder = diffTime % freq;
+      console.log(tRemainder);
+    
+      var tMinutesTillTrain = freq - tRemainder;
+      console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+    
+      var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+      console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
+    
+    
+      $("tbody").append("<tr><td>" + trainName + "</td><td>" + dest + "</td><td>" + freq + 
+         "</td><td>" + moment(nextTrain).format("HH:mm") + "</td><td>" + tMinutesTillTrain + "</td></tr>");
+    });
+    };
+    
+function updateTime(){
+$('tbody').empty();
+test();
+};
+
+                                                                    
+
+updateTime();
+setInterval(function(){
+ updateTime();
+},60000);
+    
+   
+
+
+
+
+
+
+/*function updateTime(){
+    $('tbody').empty();
+    test();
+    };
+    
+                                                                        
+    
+    updateTime();
+    setInterval(function(){
+     updateTime();
+    },60000);
+
+
+      // 3. Create Firebase event for adding train to the database and a row in the html when a user adds an entry
   database.ref().on("child_added", function(childSnapshot) {
     console.log(childSnapshot.val());
     console.log(childSnapshot.val().destination);
@@ -90,4 +157,4 @@ var firebaseConfig = {
   
     // Append the new row to the table
     $("#train-table > tbody").append(newRow);
-  });
+  });*/
