@@ -33,13 +33,7 @@ var firebaseConfig = {
   
     // Uploads train data to the database
     database.ref().push(newTrain);
-  
-    // Logs everything to console
-    console.log(newTrain.name);
-    console.log(newTrain.destination);
-    console.log(newTrain.start);
-    console.log(newTrain.frequency);
-  
+    
     // Clears all of the text-boxes
     $("#train-name-input").val("");
     $("#destination-input").val("");
@@ -49,36 +43,35 @@ var firebaseConfig = {
   
   function test(){
     database.ref().on("child_added", function (childSnapshot) {
-    
-    
+    console.log('ChildSnapshot below')
+    console.log(childSnapshot);
+    var childKey = childSnapshot.key;
+    console.log(childKey);
       // Store everything into a variable.
     var trainName = childSnapshot.val().name;
     var dest = childSnapshot.val().destination;
-    var firstStop = 0;
+    var firstStop = childSnapshot.val().start;
     var freq = childSnapshot.val().frequency;
-  
+     
+      var firstConverted = moment(firstStop, 'X').format('HH:mm');
+    
+      var currentTime = moment().format('HH:mm');
 
-      var firstConverted = moment(firstStop, "HH:mm").subtract(1, "years");
-      console.log(firstConverted);
-    
-      var currentTime = moment();
-      console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
-    
-      var diffTime = moment().diff(moment(firstConverted), "minutes");
-      console.log("DIFFERENCE IN TIME: " + diffTime);
-    
+      var diffTime = moment().diff(moment(firstConverted, 'HH:mm'), "minutes");
+
       var tRemainder = diffTime % freq;
-      console.log(tRemainder);
     
       var tMinutesTillTrain = freq - tRemainder;
-      console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
     
       var nextTrain = moment().add(tMinutesTillTrain, "minutes");
-      console.log("ARRIVAL TIME: " + moment(nextTrain).format("HH:mm"));
+      
+      if(currentTime < firstConverted){
+        nextTrain = firstConverted;
+      }else{nextTrain =  moment(nextTrain).format("HH:mm")}
     
-    
+
       $("tbody").append("<tr><td>" + trainName + "</td><td>" + dest + "</td><td>" + freq + 
-         "</td><td>" + moment(nextTrain).format("HH:mm") + "</td><td>" + tMinutesTillTrain + "</td></tr>");
+         "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td><td>" + '<button key=' + childKey +' onClick="$(this).closest("tr").remove()" type="button" class="btn btn-danger delete">Delete</button>' +"</td></tr>");
     });
     };
     
@@ -87,21 +80,34 @@ $('tbody').empty();
 test();
 };
 
-                                                                    
-
 updateTime();
 setInterval(function(){
  updateTime();
 },60000);
+
+$('body').on('click', '.delete', function(){
+
+  database.ref().child($(this).attr('key')).remove();
+  $(this).closest('tr').remove();
+
+});
     
    
 
 
-
+/*if(parseInt(currentTime) >= parseInt(firstConverted)){
+  nextTrain = firstConverted;
+  console.log('Next Train in IF:' + nextTrain)
+}else{};*/
 
 
 
 /*function updateTime(){
+
+.subtract(1, "years")
+
+
+
     $('tbody').empty();
     test();
     };
