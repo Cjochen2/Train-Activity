@@ -1,0 +1,44 @@
+body{
+    background-image: url('../images/thomas.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; 
+    height: 100%;
+    width: 100%;
+
+}
+
+.jumbotron{
+    background-image: url('../images/jumbo.jpg');
+    background-size: cover;
+    background-repeat: no-repeat; 
+    height: 100%;
+    width: 100%; 
+}
+
+tbody tr:nth-child(odd){
+    background-color: #4C8BF5;
+    color: #fff;
+  }
+
+  tbody tr:nth-child(even){
+    background-color: rgb(190, 27, 27);
+    color: #fff;
+  }
+
+.card-header{
+    background-color: rgb(216, 216, 29);
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    
+}
+
+.card-body{
+    background-color: rgb(187, 177, 177);
+}
+
+#add-train-btn{
+    background-color: green;
+    border: none;
+}
+

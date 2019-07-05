@@ -39,14 +39,15 @@ var firebaseConfig = {
     $("#destination-input").val("");
     $("#first-input").val("");
     $("#frequency-input").val("");
+    
   });
   
   function test(){
+
     database.ref().on("child_added", function (childSnapshot) {
-    console.log('ChildSnapshot below')
-    console.log(childSnapshot);
+  
     var childKey = childSnapshot.key;
-    console.log(childKey);
+    
       // Store everything into a variable.
     var trainName = childSnapshot.val().name;
     var dest = childSnapshot.val().destination;
@@ -71,7 +72,7 @@ var firebaseConfig = {
     
 
       $("tbody").append("<tr><td>" + trainName + "</td><td>" + dest + "</td><td>" + freq + 
-         "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td><td>" + '<button key=' + childKey +' onClick="$(this).closest("tr").remove()" type="button" class="btn btn-danger delete">Delete</button>' +"</td></tr>");
+         "</td><td>" + nextTrain + "</td><td>" + tMinutesTillTrain + "</td><td>" + '<button key=' + childKey +' onClick="$(this).closest("tr").remove()" type="button" class="btn btn-danger delete btn-outline-dark text-light">Delete</button>' +"</td></tr>");
     });
     };
     
@@ -92,13 +93,6 @@ $('body').on('click', '.delete', function(){
 
 });
     
-   
-
-
-/*if(parseInt(currentTime) >= parseInt(firstConverted)){
-  nextTrain = firstConverted;
-  console.log('Next Train in IF:' + nextTrain)
-}else{};*/
 
 
 
