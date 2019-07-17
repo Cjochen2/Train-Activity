@@ -4,4 +4,4 @@ Train-Activity is an app that tracks make-believe train (or real train if you so
 
 Train times are updated real time utilizing Moment.js and are updated every sixty seconds.
 
-Try it out here: 
+Try it out here: https://cjochen2.github.io/Train-Activity/
